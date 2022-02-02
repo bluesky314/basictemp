@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        First Script
+    </title>
+    <link rel="stylesheet" href="dist/notifications.css">
+    <script src="dist/notifications.js"></script>
+
+</head>
+
+<body>
+    <h1>Where is the ISIS?</h1>
+
+    <p>
+      latitude: <span id="lat"></span>°<br />  <!-- as we want to enter somthing mid line we create span tag -->
+      longitude: <span id="lon"></span>°
+    </p>
+    <script>
+
+    set_values()
+
+    
+    
+    async function getData(){ // calls api and sets span value to response
+        const api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
+        const response = await fetch(api_url);
+        const data = await response.json();
+        const {longitude,latitude}=data;
+        console.log(longitude,latitude)
+        document.getElementById('lat').textContent = latitude  // round to 2 floating point
+        document.getElementById('lon').textContent = longitude 
+
+        return longitude,latitude
+    }
+    async function set_values(){
+        var {longitude,latitude} = setInterval(getData,3000) // calls getData every 3000ms(3s) 
+   
+    }
+
+    const myNotification = window.createNotification({closeOnClick: true,
+        showDuration: 10000,
+        theme: 'warning',
+    });
+    myNotification({ title: 'Title', message: 'Notification Message' });
+
+
+    </script>
+
+</body>
+
+
